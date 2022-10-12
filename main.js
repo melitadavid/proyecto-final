@@ -3,7 +3,7 @@
 .then(datos => console.log(datos));
  */
 // var iniciales
-let shoppongCartArray = [];
+let shoppingCartArray = [];
 let total = 0;
 let productContainer = document.querySelector('.shop-items');
 let totalElemet = document.querySelector('.cart-total-title');
@@ -25,7 +25,7 @@ productsArray.forEach(product => {
                     <img class="shop-item-image" src="${product.images[0]}">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$${product.price}</span>
-                        <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+                        <button class="btn btn-primary shop-item-button" type="button">AGREGAR</button>
                     </div>
      </div>
      `
@@ -40,7 +40,7 @@ let cartContainer = document.querySelector('.cart-items')
 
 addBtns.forEach(btn=>{
     btn.addEventListener('click', Event=>{
-        console.log('click')
+        
         //agrego productos al carro 
 
         //buscatr id del  producto
@@ -55,13 +55,13 @@ addBtns.forEach(btn=>{
         }
 
 
-        console.log(actualProduct.id);
- //preguntar si el producto ya existe
+        
+ 
 
       
         let existe = false
 
-        shoppongCartArray.forEach(productos =>{
+        shoppingCartArray.forEach(productos =>{
             if (actualID == productos.id) {
                 existe = true
             }
@@ -73,39 +73,40 @@ addBtns.forEach(btn=>{
             console.log('aumentado')
             actualProduct.quantity++
         }else{
-            shoppongCartArray.push(actualProduct)
+            shoppingCartArray.push(actualProduct)
         }
         
-        console.log(shoppongCartArray);
+        console.log(shoppingCartArray);
        
         drawItems()
 
         
-        //actualizar el valor total
-        total = getTotal()
+       getTotal()
 
-        updateNumberOfItems();
-        console.log(total);
+        updateNumberOfItems()
+
+        removeItems()
+        
     });
 });
 
 function getTotal() {
 
     let sumTotal
-    let total = shoppongCartArray.reduce((sum, item)=> {
+    let total = shoppingCartArray.reduce((sum, item)=> {
 
         sumTotal = sum + item.quantity*item.price
         return sumTotal
     } , 0);
 
-    totalElemet.innerHTML = `$${total}`
+    totalElemet.innerText = `$${total}`
 }
  
 
 function drawItems() {
 
     cartContainer.innerHTML ='';
-    shoppongCartArray.forEach(item =>{
+    shoppingCartArray.forEach(item =>{
      
      cartContainer.innerHTML +=`
      <div class="cart-row">
@@ -116,35 +117,66 @@ function drawItems() {
                  <span class="cart-price cart-column">$${item.price}</span>
                  <div class="cart-quantity cart-column">
                      <input class="cart-quantity-input" min="1" type="number" value="${item.quantity}">
-                     <button class="btn btn-danger" type="button">REMOVE</button>
+                     <button class="btn btn-danger" type="button">BORRAR</button>
                  </div>
              </div>
      `
 
 
     });
+    removeItems()
     
 }
 
 function updateNumberOfItems() {
-    let inputNumber = document.querySelector('.cart-quantity-imput')
-    
-    inputNumber = [...inputNumber]
-    
-inputNumber.forEach(item => {
+        let inputNumber = document.querySelectorAll('.cart-quantity-input')
+        
+        inputNumber = [...inputNumber];
+        
+    inputNumber.forEach(item => {
 
-    item.addEventListener('click', Event=>{
-       let actualBookTitle = Event.target.parentElement.parentElement.childNodes[1].innerText;
+        item.addEventListener('click', Event=>{
+        let actualBookTitle = Event.target.parentElement.parentElement.childNodes[1].innerText;
+            let actualBookQuantity = parseInt(Event.target.value);
+            console.log(actualBookQuantity);
 
+    
+        let actualBookObject = shoppingCartArray.find(item =>item.title == actualBookTitle)
+            console.log(actualBookObject);
+
+                actualBookObject.quantity = actualBookQuantity;
+
+
+                getTotal();
+        });
+    });
+}
+
+function removeItems() {
+        let removeBtns = document.querySelectorAll('.btn-danger');
+        removeBtns = [...removeBtns];
+        removeBtns.forEach(btn => {
+        btn.addEventListener('click', Event =>{
+        
+            let actualBookTitle = Event.target.parentElement.parentElement.childNodes[1].innerText
+
+            let actualBookObject = shoppingCartArray.find(item =>item.title == actualBookTitle)
+
+            shoppingCartArray = shoppingCartArray.filter(item => item != actualBookObject)
+            console.log(shoppingCartArray);
+
+            drawItems()
+
+            
+            getTotal()
+            updateNumberOfItems()
+        });
 
     });
-});
 }
 
 
-
-
-
+ 
 
 
 
