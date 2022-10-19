@@ -2,6 +2,8 @@
 .then(res => res.json())
 .then(datos => console.log(datos));
  */
+//libreria
+Swal.fire('Bienvenido a la tienda')
 // var iniciales
 let shoppingCartArray = [];
 let total = 0;
