@@ -2,8 +2,24 @@
 .then(res => res.json())
 .then(datos => console.log(datos));
  */
+
+//Operadores avanzados
+let nombre = prompt("ingresa tu nombre")
+let edad = prompt("ingresa tu edad");
 //libreria
-Swal.fire('Bienvenido a la tienda')
+edad >= 18 ? Swal.fire(
+    'Bienvenido',
+    `Hola ${nombre} te damos la bienvenida a nuestra app online`,
+  ) : 
+Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: `${nombre} Lo sentimos tienes que ser mayor de 18 años.`,
+   
+  })
+
+
+
 // var iniciales
 let shoppingCartArray = [];
 let total = 0;
